@@ -13,7 +13,7 @@ tts_pub  = rospy.Publisher('/textToSpeech', String, queue_size=10)
 face_pub = rospy.Publisher('/hri/affective_loop', String, queue_size=10)
 operador_detection = rospy.Publisher('/face_detection/operador_take', Empty, queue_size=10)
 comparador_detection = rospy.Publisher('/face_detection/comparador_take', Empty, queue_size=10)
-recognition_run = rospy.Publisher('/face_detection/recognition', Empty, queue_size=10 )
+#recognition_run = rospy.Publisher('/face_detection/recognition', Empty, queue_size=10 )
 
 def task_procedure(self):
     rospy.logwarn("Start")
@@ -26,6 +26,12 @@ def task_procedure(self):
     tts_pub.publish('Finish')
     face_pub.publish('happy')
     time.sleep(1)
+    
+    rospy.wait_for_service("services/faceRecognition")
+    face_recognition = rospy.ServiceProxy("services/faceRecognition", FaceRec)
+    face_coor = face_recognition()
+
+
     
     #depois que o bobão viro
     tts_pub.publish('Looking for my Operator...')
